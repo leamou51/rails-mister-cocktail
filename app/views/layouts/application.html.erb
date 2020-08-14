@@ -15,13 +15,12 @@
   </head>
 
   <body>
-
     <% if controller_name == "cocktails" && action_name == "index"%>
+      <%= render "shared/navbarhome" %>
+    <% else %>
       <%= render "shared/navbar" %>
     <% end %>
     <%= yield %>
-
     <%= render "shared/footer" %>
-
   </body>
 </html>

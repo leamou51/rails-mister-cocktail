@@ -1,7 +1,7 @@
 const initUpdateNavbarOnScroll = () => {
-  const navbar = document.querySelector('.navbar-lewagon');
+  const navbar = document.querySelector('.navbar-lewagon-home');
   const navLinks = document.querySelectorAll('.navbar-light .navbar-nav .nav-link');
-  const navTitle = document.querySelector('.navbar-lewagon h1');
+  const navTitle = document.querySelector('.navbar-lewagon-home h1');
 
   if (navbar) {
     window.addEventListener('scroll', () => {

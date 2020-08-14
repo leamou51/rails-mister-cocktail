@@ -1,14 +1,18 @@
-<div class="banner" style="background-image: linear-gradient(rgba(0,0,0,0.4),rgba(0,0,0,0.4)), url(<%= @cocktail.picture %>);">
-  <div class="container">
-    <h1><%= @cocktail.name %></h1>
+<div class="container" style="border-radius: 5px; padding-top:64px">
+  <div class="card-trip" >
+    <div class="card-trip-image" style="background-image: linear-gradient(rgba(0,0,0,0.4),rgba(0,0,0,0.4)), url(<%= @cocktail.picture %>)">
+      <h1><%= @cocktail.name %></h1>
+    </div>
+    <div class="card-trip-infos">
+      <div>
+        <h2>Ingredients</h2>
+        <ul>
+          <% @cocktail.doses.each do |dose|  %>
+            <li><%= dose.description %> - <%= dose.ingredient.name %> </li>
+          <% end %>
+          </ul>
+      </div>
+      <%= link_to 'Modify receipe', new_cocktail_dose_path(@cocktail), class: 'btn btn-flat card-trip-pricing' %>
+    </div>
+  </div>
 </div>
-
-<h2>Ingredients</h2>
-
-<ul>
-<% @cocktail.doses.each do |dose|  %>
-  <li><%= dose.description %> - <%= dose.ingredient.name %> </li>
-<% end %>
-</ul>
-
-<%= link_to 'Modify receipe', new_cocktail_dose_path(@cocktail)  %>

@@ -1,3 +1,20 @@
+.navbar-lewagon-home {
+  justify-content: space-between;
+  transition: 0.5s background-color ease;
+  h1 {
+    font-size: 40px;
+    font-family: $title-font;
+  }
+}
+
+.navbar-lewagon-home .navbar-collapse {
+  flex-grow: 0;
+}
+
+.navbar-lewagon-home .navbar-brand img {
+  width: 40px;
+}
+
 .navbar-lewagon {
   justify-content: space-between;
   transition: 0.5s background-color ease;
