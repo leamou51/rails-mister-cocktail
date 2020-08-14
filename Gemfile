@@ -36,6 +36,9 @@ gem 'simple_form'
 #don't share cloudinary secret keys on Github
 gem 'dotenv-rails', groups: [:development, :test]
 
+# cloudinary
+gem 'cloudinary', '~> 1.12.0'
+
 # fake data
 gem 'faker', :git => 'https://github.com/faker-ruby/faker.git', :branch => 'master'
 
