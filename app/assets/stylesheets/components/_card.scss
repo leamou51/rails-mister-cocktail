@@ -42,7 +42,7 @@
 .card-trip-image {
   background-size: cover;
   background-position: center;
-  height: 50vh;
+  height: 40vh;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -61,10 +61,10 @@
 
 
 .card-trip .card-trip-infos {
-  padding: 16px;
+  padding: 24px;
   display: flex;
   justify-content: space-between;
-  align-items: flex-end;
+  align-items: flex-start;
   position: relative;
 }
 

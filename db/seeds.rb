@@ -7,7 +7,9 @@
 #   Character.create(name: 'Luke', movie: movies.first)
 require 'json'
 require 'open-uri'
+require 'nokogiri'
 require 'faker'
+
 
 puts "Cleaning database..."
 
@@ -18,118 +20,63 @@ Ingredient.destroy_all
 
 puts "Creating fake cocktails..."
 
-# adding ingredients to DB
-url = 'https://www.thecocktaildb.com/api/json/v1/1/list.php?i=list'
-ingredients_serialized = open(url).read
-ingredients = JSON.parse(ingredients_serialized)
+url_list = "https://www.diffordsguide.com/g/1127/worlds-top-100-cocktails/1-20"
 
-ingredients["drinks"].each do |ingredient|
-  ingredient_db = Ingredient.new(name: ingredient["strIngredient1"])
-  ingredient_db.save
+html_file = open(url_list).read
+html_doc = Nokogiri::HTML(html_file)
+
+cocktails_url =[]
+html_doc.search('.long-form p a').each do |element|
+  cocktails_url << element.attribute('href').value
 end
 
-# creating fake cocktail and adding them to DB
-# 10.times do
-#   cocktail = Cocktail.new(name: "#{Faker::Space.planet} cocktail" )
-#   # creating fake doses and adding them to DB
-#   numb_ingredients = rand(3) + 2
-#   numb_ingredients.times do
-#     dose= Dose.new(description: "#{rand(5) + 2}cl", cocktail: cocktail, ingredient: Ingredient.all.to_a.sample)
-#     dose.save
-#   end
-#   cocktail.save
-# end
+cocktails_url.delete_at(2)
 
-cocktails = [
-  {
-    name: "Old Fashioned",
-    picture: "http://www.seriouseats.com/images/2014/11/20141104-cocktail-party-old-fashioneds-holiday-vicky-wasik-3.jpg"
-    },
-  {
-    name: "Daiquiri",
-    picture: "http://www.seriouseats.com/images/2015/03/20150323-cocktails-vicky-wasik-daiquiri.jpg"
-    },
-  {
-    name: "Margarita",
-    picture: "http://www.seriouseats.com/images/2015/03/20150323-cocktails-vicky-wasik-margarita.jpg"
-    },
-  {
-    name: "Sidecar",
-    picture: "http://www.seriouseats.com/images/2014/11/20141101-cognac-sidecar-carey-jones.jpg"
-    },
-  {
-    name: "French 75",
-    picture: "http://www.seriouseats.com/images/2015/03/20150323-cocktails-vicky-wasik-french75.jpg"
-    },
-  {
-    name: "Bloody Mary",
-    picture: "http://www.seriouseats.com/images/2015/03/twase-20150320-21.jpg"
-    },
-  {
-    name: "Irish Coffee",
-    picture: "http://www.seriouseats.com/images/2015/03/20150323-cocktails-vicky-wasik-irish-coffee.jpg"
-    },
-  {
-    name: "Jack Rose",
-    picture: "http://www.seriouseats.com/images/2015/03/20150323-cocktails-vicky-wasik-jack-rose.jpg"
-    },
-  {
-    name: "Negroni",
-    picture: "http://www.seriouseats.com/images/2015/03/20150323-cocktails-vicky-wasik-negroni.jpg"
-    },
-  {
-    name: "Boulevardier",
-    picture: "http://www.seriouseats.com/images/2015/03/20150323-cocktails-vicky-wasik-boulevardier.jpg"
-    },
-  {
-    name: "Sazerac",
-    picture: "http://www.seriouseats.com/images/2015/03/20150323-cocktails-vicky-wasik-sazerac.jpg"
-    },
-  {
-    name: "Vieux Carré",
-    picture: "http://www.seriouseats.com/images/2015/03/20150323-cocktails-vicky-wasik-vieux-carre.jpg"
-    },
-  {
-    name: "Ramos Gin Fizz",
-    picture: "http://www.seriouseats.com/images/2015/03/20150323-cocktails-robyn-lee-ramos-gin-fizz.jpg"
-    },
-  {
-    name: "Mint Julep",
-    picture: "http://www.seriouseats.com/images/2015/03/20150323-cocktails-vicky-wasik-mint-julep.jpg"
-    },
-  {
-    name: "Whiskey Sour",
-    picture: "http://www.seriouseats.com/images/2015/03/20150323-cocktails-vicky-wasik-whiskey-sour.jpg"
-    },
-  {
-    name: "Mai Tai",
-    picture: "http://www.seriouseats.com/images/2015/03/20150323-cocktails-vicky-wasik-mai-tai.jpg"
-    },
-  {
-    name: "Planter's Punch",
-    picture: "http://www.seriouseats.com/images/2015/04/20150406-cocktails-planters-punch-robyn-lee-1.jpg"
-    },
-  {
-    name: "Pisco Sour",
-    picture: "http://www.seriouseats.com/images/2015/03/20150323-cocktails-vicky-wasik-pisco-sour.jpg"
-    },
-  {
-    name: "Cosmopolitan",
-    picture: "http://www.seriouseats.com/images/2015/03/20150323-cocktails-vicky-wasik-cosmopolitan.jpg"
-    },
-  {
-    name: "Tom Collins",
-    picture: "http://www.seriouseats.com/images/2015/03/20150323-cocktails-vicky-wasik-tom-collins.jpg"
-    },
-  {
-    name: "Last Word",
-    picture: "http://www.seriouseats.com/images/2015/03/20150323-cocktails-vicky-wasik-last-word.jpg"
-  }
-]
+# puts "COCKTAIL URL"
+# puts cocktails_url
 
-cocktails.each do |cocktail|
-  cocktail = Cocktail.new(name: cocktail[:name], picture: cocktail[:picture])
+cocktails_url.each do |url|
+  html_file = open("https://www.diffordsguide.com/#{url}").read
+  html_doc = Nokogiri::HTML(html_file)
+
+
+  cocktail_name = html_doc.search('h1').text.strip.gsub("Cocktail Hall of Fame","")
+  cocktail_picture =  "https://source.unsplash.com/random/?cocktail"
+  cocktail = Cocktail.new(name: cocktail_name, picture: cocktail_picture)
+
+  # puts "COCKTAIL NAME"
+  # puts cocktail.name
+
+  ingredients_and_doses = []
+  html_doc.search('.td-align-top').each do |element|
+    ingredients_and_doses << element.text.strip
+  end
+
+  ingredients = []
+  doses = []
+  ingredients_and_doses.each_with_index do |element,index|
+    if index % 2 == 0
+      doses << element
+    else
+      ingredient = Ingredient.new(name: element)
+      ingredient.save
+      ingredients << ingredient
+    end
+  end
+
+  # puts "COCKTAIL INGREDIENTS"
+  # puts ingredients
+
+  # puts "COCKTAIL DOSES"
+  # puts doses
+
+  doses.each_with_index do |element, index|
+    dose = Dose.new(description: element, cocktail: cocktail, ingredient: ingredients[index])
+    dose.save
+  end
+
   cocktail.save
+
 end
 
 puts "Finished!"

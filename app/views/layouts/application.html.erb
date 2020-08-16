@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html style="height: 100%">
   <head>
     <title>RailsMisterCocktail</title>
     <%= csrf_meta_tags %>
@@ -14,7 +14,7 @@
     <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload', defer: true%>
   </head>
 
-  <body>
+  <body style="height: 100%;  display:flex; flex-direction:column ">
     <% if controller_name == "cocktails" && action_name == "index"%>
       <%= render "shared/navbarhome" %>
     <% else %>
